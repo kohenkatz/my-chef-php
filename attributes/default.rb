@@ -162,3 +162,19 @@ default['php']['configure_options'] = %W{--prefix=#{php['prefix_dir']}
 
 default['php']['ini']['template'] = "php.ini.erb"
 default['php']['ini']['cookbook'] = "php"
+
+default['php']['xdebug']['cli_color'] = 1
+default['php']['xdebug']['scream'] = 0
+default['php']['xdebug']['remote_enable'] = "On"
+default['php']['xdebug']['remote_autostart'] = 0
+default['php']['xdebug']['remote_mode'] = "req"
+default['php']['xdebug']['remote_connect_back'] = 1
+default['php']['xdebug']['idekey'] = "macgdbp"
+default['php']['xdebug']['file_link_format'] = "txmt://open?url=file://%f&line=%1"
+default['php']['xdebug']['profiler_enable_trigger'] = 0
+default['php']['xdebug']['profiler_enable'] = 0
+default['php']['xdebug']['profiler_output_dir'] = "/tmp/cachegrind"
+
+default['php']['composer']['install'] = true
+default['php']['composer']['as_bin'] = true
+

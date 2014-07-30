@@ -1,10 +1,8 @@
 #
-# Author::  Joshua Timberman (<joshua@opscode.com>)
-# Author::  Seth Chisamore (<schisamo@opscode.com>)
-# Cookbook Name:: php
-# Recipe:: default
+# Cookbook Name:: chef-php-extra
+# Recipe:: xdebug
 #
-# Copyright 2009-2011, Opscode, Inc.
+# Copyright 2012, Alistair Stead
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,19 +17,17 @@
 # limitations under the License.
 #
 
-include_recipe "php::#{node['php']['install_method']}"
-
-# update the main channels
-php_pear_channel 'pear.php.net' do
-  action :update
+if platform?(%w{debian ubuntu})
+  package "php5-xdebug"
+elsif platform?(%w{centos redhat fedora amazon scientific})
+  php_pear "xdebug" do
+    action :install
+  end
 end
 
-php_pear_channel 'pecl.php.net' do
-  action :update
-end
-
-include_recipe "php::ini"
-
-php_composer do
-  only_if { node['php']['composer']['install'] }
+template "#{node['php']['ext_conf_dir']}/xdebug.ini" do
+  mode "0644"
+  variables(
+    :params => node['php']['xdebug']
+  )
 end
