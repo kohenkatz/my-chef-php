@@ -32,6 +32,6 @@ end
 
 include_recipe "php::ini"
 
-php_composer do
+php_composer 'global' do
   only_if { node['php']['composer']['install'] }
 end
