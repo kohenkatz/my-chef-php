@@ -55,6 +55,18 @@ if platform?('windows')
   windows_path install_dir
 
 else
+  if node['platform'] == 'debian'
+    include_recipe "apt"
+    apt_repository 'dotdeb' do
+      only_if      { node['php']['use_dotdeb'] }
+      uri          'http://packages.dotdeb.org'
+      distribution node['php']['dotdeb_version']
+      components   ['all']
+      key          'http://www.dotdeb.org/dotdeb.gpg'
+      deb_src      true
+    end
+  end
+
   node['php']['packages'].each do |pkg|
     package pkg do
       action :install
