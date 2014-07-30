@@ -25,5 +25,11 @@ when 'rhel', 'fedora'
 when 'debian'
   package 'php5-curl' do
     action :upgrade
+    notifies(:run, "execute[/usr/sbin/php5enmod curl]", :immediately) if platform?('ubuntu') && node['platform_version'].to_f >= 12.04
   end
+end
+
+execute '/usr/sbin/php5enmod curl' do
+  action :nothing
+  only_if { platform?('ubuntu') && node['platform_version'].to_f >= 12.04 && ::File.exists?('/usr/sbin/php5enmod') }
 end

@@ -1,6 +1,8 @@
 #
 # Author::  Joshua Timberman (<joshua@opscode.com>)
 # Author::  Seth Chisamore (<schisamo@opscode.com>)
+# Author::  Panagiotis Papadomitsos (<pj@ezgr.net>)
+#
 # Cookbook Name:: php
 # Recipe:: module_mysql
 #
@@ -29,4 +31,10 @@ pkg = value_for_platform(
 
 package pkg do
   action :install
+  notifies(:run, "execute[/usr/sbin/php5enmod #{node['php']['mysql_module_edition']}]", :immediately) if platform?('ubuntu') && node['platform_version'].to_f >= 12.04
+end
+
+execute "/usr/sbin/php5enmod #{node['php']['mysql_module_edition']}" do
+  action :nothing
+  only_if { platform?('ubuntu') && node['platform_version'].to_f >= 12.04 && ::File.exists?('/usr/sbin/php5enmod') }
 end

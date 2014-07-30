@@ -1,5 +1,8 @@
 #
 # Author:: Seth Chisamore (<schisamo@opscode.com>)
+# Author:: Panagiotis Papadomitsos (pj@ezgr.net)
+# Author:: Moshe Katz (moshe@ymkatz.net)
+#
 # Cookbook Name:: php
 # Attribute:: default
 #
@@ -20,6 +23,8 @@
 
 lib_dir = 'lib'
 default['php']['install_method'] = 'package'
+default['php']['use_dotdeb'] = false
+default['php']['dotdeb_version'] = nil
 default['php']['directives'] = {}
 default['php']['bin'] = 'php'
 
@@ -33,6 +38,12 @@ when 'rhel', 'fedora'
   default['php']['ext_conf_dir']  = '/etc/php.d'
   default['php']['fpm_user']      = 'nobody'
   default['php']['fpm_group']     = 'nobody'
+  default['php']['fpm_conf_dir']  = '/etc'
+  default['php']['fpm_pool_dir']  = '/etc/php-fpm.d'
+  default['php']['fpm_log_dir']   = '/var/log/php-fpm'
+  default['php']['fpm_pidfile']   = '/var/run/php-fpm/php-fpm.pid'
+  default['php']['fpm_logfile']   = '/var/log/php-fpm/fpm-master.log'
+  default['php']['fpm_rotfile']   = '/etc/logrotate.d/php-fpm'
   default['php']['ext_dir']       = "/usr/#{lib_dir}/php/modules"
   if node['platform_version'].to_f < 6
     default['php']['packages'] = %w{ php53 php53-devel php53-cli php-pear }
@@ -44,6 +55,12 @@ when 'debian'
   default['php']['ext_conf_dir']  = '/etc/php5/conf.d'
   default['php']['fpm_user']      = 'www-data'
   default['php']['fpm_group']     = 'www-data'
+  default['php']['fpm_conf_dir']  = '/etc/php5/fpm'
+  default['php']['fpm_pool_dir']  = '/etc/php5/fpm/pool.d'
+  default['php']['fpm_log_dir']   = '/var/log/php5-fpm'
+  default['php']['fpm_pidfile']   = '/var/run/php5-fpm.pid'
+  default['php']['fpm_logfile']   = '/var/log/php5-fpm/fpm-master.log'
+  default['php']['fpm_rotfile']   = '/etc/logrotate.d/php5-fpm'
   default['php']['packages']      = %w{ php5-cgi php5 php5-dev php5-cli php-pear }
 when 'suse'
   default['php']['conf_dir']      = '/etc/php5/cli'
@@ -75,13 +92,35 @@ else
   default['php']['ext_conf_dir']  = '/etc/php5/conf.d'
   default['php']['fpm_user']      = 'www-data'
   default['php']['fpm_group']     = 'www-data'
+  default['php']['fpm_conf_dir']  = '/etc/php5/fpm'
+  default['php']['fpm_pool_dir']  = '/etc/php5/fpm/pool.d'
+  default['php']['fpm_log_dir']   = '/var/log/php5-fpm'
+  default['php']['fpm_pidfile']   = '/var/run/php5-fpm.pid'
+  default['php']['fpm_logfile']   = '/var/log/php5-fpm/fpm-master.log'
+  default['php']['fpm_rotfile']   = '/etc/logrotate.d/php5-fpm'
   default['php']['packages']      = %w{ php5-cgi php5 php5-dev php5-cli php-pear }
 end
 
 default['php']['url'] = 'http://us1.php.net/get'
-default['php']['version'] = '5.5.9'
-default['php']['checksum'] = '378de162efdaeeb725ed38d7fe956c9f0b9084ff'
+default['php']['version'] = '5.5.15'
+default['php']['checksum'] = '63b56e64e7c25b1c6dcdf778333dfa24'
 default['php']['prefix_dir'] = '/usr/local'
+
+# PHP.ini Settings
+default['php']['ini_settings'] = {
+  'max_execution_time' => '300',
+  'max_input_time' => '300',
+  'memory_limit' => '128M',
+  'error_reporting' => 'E_ALL & ~E_DEPRECATED',
+  'display_errors' => 'On',
+  'post_max_size' => '8M',
+  'allow_url_fopen' => 'On',
+  'allow_url_include' => 'Off',
+  'upload_max_filesize' => '2M',
+  'date.timezone' => 'UTC',
+  'session.cookie_httponly' => '1'
+}
+
 
 default['php']['configure_options'] = %W{--prefix=#{php['prefix_dir']}
                                          --with-libdir=#{lib_dir}
