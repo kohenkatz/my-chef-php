@@ -17,7 +17,7 @@
 #
 
 action :install_composer do
-  if !::File.directory?(new_resource.project_path)
+  if !node['php']['composer']['as_bin'] && !::File.directory?(new_resource.project_path)
     raise "#{new_resource.project_path} is not a directory"
   end
 
