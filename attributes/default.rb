@@ -175,6 +175,8 @@ default['php']['xdebug']['profiler_enable_trigger'] = 0
 default['php']['xdebug']['profiler_enable'] = 0
 default['php']['xdebug']['profiler_output_dir'] = "/tmp/cachegrind"
 
+default['php']['mysql_module_edition'] = 'mysqlnd'
+
 default['php']['composer']['install'] = true
 default['php']['composer']['as_bin'] = true
 
