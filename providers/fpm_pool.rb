@@ -31,7 +31,7 @@ action :add do
 			:name => new_resource.name,
 			:user => new_resource.user,
 			:group => new_resource.group,
-			:ip_address => new_resource.ip_address,			
+			:ip_address => new_resource.ip_address,
 			:port => new_resource.port,
 			:socket => new_resource.socket,
 			:socket_path => new_resource.socket_path,
@@ -75,7 +75,7 @@ action :remove do
 		action :delete
 		notifies :restart, 'service[php-fpm]'
 	end
-	
+
 	new_resource.updated_by_last_action(a.updated_by_last_action?)
 
 end
