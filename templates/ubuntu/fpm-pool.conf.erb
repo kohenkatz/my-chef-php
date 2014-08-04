@@ -18,12 +18,11 @@ listen.allowed_clients = <%= @ip_whitelist.join(",") %>
 
 pm                      = <%= @process_manager %>
 pm.max_children         = <%= @max_children %>
-<% case @process_manager
-when "dynamic" %>
+<% if @process_manager == :dynamic %>
 pm.start_servers        = <%= @start_servers %>
 pm.min_spare_servers    = <%= @min_spare_servers %>
 pm.max_spare_servers    = <%= @max_spare_servers %>
-<% when "ondemand" %>
+<% elsif @process_manager == :ondemand %>
 pm.process_idle_timeout = <%= @process_idle_timeout %>
 <% end %>
 
