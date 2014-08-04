@@ -2,8 +2,8 @@
 
 [<%= @name %>]
 
-user  = <%= process_owner %>
-group = <%= process_group %>
+user  = <%= @process_owner %>
+group = <%= @process_group %>
 
 <% if @use_socket -%>
 listen       = <%= @socket_path %>
@@ -16,15 +16,15 @@ listen.backlog         = <%= @tcp_backlog %>
 listen.allowed_clients = <%= @ip_whitelist.join(",") %>
 <% end -%>
 
-pm                      = <%= process_manager %>
-pm.max_children         = <%= max_children %>
-<% case process_manager
+pm                      = <%= @process_manager %>
+pm.max_children         = <%= @max_children %>
+<% case @process_manager
 when "dynamic" %>
-pm.start_servers        = <%= start_servers %>
-pm.min_spare_servers    = <%= min_spare_servers %>
-pm.max_spare_servers    = <%= max_spare_servers %>
+pm.start_servers        = <%= @start_servers %>
+pm.min_spare_servers    = <%= @min_spare_servers %>
+pm.max_spare_servers    = <%= @max_spare_servers %>
 <% when "ondemand" %>
-pm.process_idle_timeout = <%= process_idle_timeout %>
+pm.process_idle_timeout = <%= @process_idle_timeout %>
 <% end %>
 
 ;pm.max_requests = 500
@@ -43,12 +43,12 @@ access.log     = <%= @log_filename %>
 access.format  = <%= @log_format %>
 <% end %>
 
-<% unless (@slow_filename.empty? || @slow_timeout < 1) %>
+<% unless (@slow_filename.empty? || @slow_timeout.empty?) %>
 slowlog                  = <%= @slow_filename %>
 request_slowlog_timeout  = <%= @slow_timeout %>
 <% end %>
 
-<% unless @terminate_timeout < 1 %>
+<% unless @terminate_timeout.empty? %>
 request_terminate_timeout = <%= @terminate_timeout %>
 <% end %>
 

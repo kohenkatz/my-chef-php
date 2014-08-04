@@ -27,11 +27,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-Array(node[:php][:fpm][:pools]).each do |site|
-  site.each do |name,options|
+Array(node[:php][:fpm][:pools]).each do |pool|
+  pool.each do |name,options|
     conf = {
       :action => :create,
-      :name => nil,
+      :name => name,
       :cookbook => nil,
       :template => nil,
       :use_socket => nil,
@@ -61,12 +61,12 @@ Array(node[:php][:fpm][:pools]).each do |site|
       :valid_extensions => nil,
       :terminate_timeout => nil,
       :initial_directory => nil,
-      :flag_overrides => nil,
-      :value_overrides => nil,
-      :env_overrides => nil
-    }.merge(options)
-p conf
-    php_fpm_pool_file name do
+      :flag_overrides => {},
+      :value_overrides => {},
+      :env_overrides => {}
+    }.merge(options || {})
+
+    php_fpm_pool name do
       action               conf['action']
       name                 conf['name']
       cookbook             conf['cookbook']

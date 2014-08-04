@@ -27,9 +27,9 @@ action :create do
 	status_url           = new_resource.status_url || '/status'
 	ping_url             = new_resource.ping_url || '/ping`'
 	ping_response        = new_resource.ping_response || 'pong'
-	log_filename         = new_resource.log_filename
+	log_filename         = new_resource.log_filename || ""
 	log_format           = new_resource.log_format || "%R - %u %t \"%m %r\" %s"
-	slow_filename        = new_resource.slow_filename
+	slow_filename        = new_resource.slow_filename || ""
 	slow_timeout         = new_resource.slow_timeout || "0"
 	valid_extensions     = new_resource.valid_extensions || ['.php']
 	terminate_timeout    = new_resource.terminate_timeout || "0"
