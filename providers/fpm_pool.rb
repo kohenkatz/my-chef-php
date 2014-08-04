@@ -25,7 +25,7 @@ action :create do
 
 	max_requests         = new_resource.max_requests || 0
 	status_url           = new_resource.status_url || '/status'
-	ping_url             = new_resource.ping_url || '/ping`'
+	ping_url             = new_resource.ping_url || '/ping'
 	ping_response        = new_resource.ping_response || 'pong'
 	log_filename         = new_resource.log_filename || ""
 	log_format           = new_resource.log_format || "%R - %u %t \"%m %r\" %s"
