@@ -1,0 +1,77 @@
+; This file is managed by Chef. Do not edit by hand!
+
+[<%= @name %>]
+
+user  = <%= process_owner %>
+group = <%= process_group %>
+
+<% if @use_socket -%>
+listen       = <%= @socket_path %>
+listen.owner = <%= @socket_owner %>
+listen.group = <%= @socket_group %>
+listen.mode  = <%= @socket_mode %>
+<% else -%>
+listen                 = <%= @ip_address %>:<%= @tcp_port %>
+listen.backlog         = <%= @tcp_backlog %>
+listen.allowed_clients = <%= @ip_whitelist.join(",") %>
+<% end -%>
+
+pm                      = <%= process_manager %>
+pm.max_children         = <%= max_children %>
+<% case process_manager
+when "dynamic" %>
+pm.start_servers        = <%= start_servers %>
+pm.min_spare_servers    = <%= min_spare_servers %>
+pm.max_spare_servers    = <%= max_spare_servers %>
+<% when "ondemand" %>
+pm.process_idle_timeout = <%= process_idle_timeout %>
+<% end %>
+
+;pm.max_requests = 500
+
+<% unless @status_url.empty? %>
+pm.status_path = <%= @status_url %>
+<% end %>
+
+<% unless (@ping_url.empty? || @ping_response.empty?) %>
+ping.path      = <%= @ping_url %>
+ping.response  = <%= @ping_response %>
+<% end %>
+
+<% unless (@log_filename.empty? || @log_format.empty?) %>
+access.log     = <%= @log_filename %>
+access.format  = <%= @log_format %>
+<% end %>
+
+<% unless (@slow_filename.empty? || @slow_timeout < 1) %>
+slowlog                  = <%= @slow_filename %>
+request_slowlog_timeout  = <%= @slow_timeout %>
+<% end %>
+
+<% unless @terminate_timeout < 1 %>
+request_terminate_timeout = <%= @terminate_timeout %>
+<% end %>
+
+;chroot =
+<% unless @initial_directory.empty? %>
+chdir   = <%= @initial_directory %>
+<% end %>
+
+; Default Value: no
+;catch_workers_output = yes
+
+<% unless @valid_extensions.empty? %>
+security.limit_extensions = <%= @valid_extensions.join(" ") %>
+<% end %>
+
+<% @flag_overrides.each do |key,value| %>
+php_flag[<%= key %>]  = <%= value %>
+<% end %>
+
+<% @value_overrides.each do |key,value| %>
+php_value[<%= key %>]  = <%= value %>
+<% end %>
+
+<% @env_overrides.each do |key,value| %>
+env[<%= key %>]  = <%= value %>
+<% end %>
