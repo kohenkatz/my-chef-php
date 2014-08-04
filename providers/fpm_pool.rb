@@ -7,7 +7,7 @@ action :create do
 	process_group        = new_resource.process_group || node['php']['fpm_group']
 
 	use_socket           = new_resource.use_socket
-	socket_path          = new_resource.socket_path || '/var/run/php5-fpm.sock'
+	socket_path          = new_resource.socket_path || "/var/run/php5-fpm-#{name}.sock"
 	socket_owner         = new_resource.socket_owner || process_owner
 	socket_group         = new_resource.socket_group || process_group
 	socket_mode          = new_resource.socket_mode || '0660'
