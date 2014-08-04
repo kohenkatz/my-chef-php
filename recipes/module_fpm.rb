@@ -58,8 +58,8 @@ end
 # For the pool log files
 directory node['php']['fpm_log_dir'] do
   owner 'root'
-  group 'root'
-  mode 01733
+  group 'www-data'
+  mode 01773
   action :create
 end
 
