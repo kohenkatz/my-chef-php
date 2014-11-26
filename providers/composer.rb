@@ -60,3 +60,19 @@ action :install_packages do
   end
   new_resource.updated_by_last_action(true)
 end
+
+action :create_project do
+
+  cmd = if ::File.exists?("#{new_resource.project_path}/composer.phar")
+    "php composer.phar"
+  else
+    "composer"
+  end
+
+  execute "create project with composer #{new_resource.name}" do
+    cwd new_resource.project_path
+    user "root"
+    command "#{cmd} create-project #{new_resource.project} -s #{new_resource.stability} ."
+  end
+  new_resource.updated_by_last_action(true)
+end
