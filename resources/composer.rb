@@ -8,6 +8,10 @@ def initialize(*args)
   @action = :install_composer
 end
 
-actions :install_composer, :install_packages
+actions :install_composer, :install_packages, :create_project
 
 attribute :project_path, :kind_of => [String, NilClass], :name_attribute => true
+
+# For `composer create-project`
+attribute :project, :kind_of => [String, NilClass]
+attribute :stability, :kind_of => [Symbol], :default => :stable, :equal_to => [:dev, :alpha, :beta, :RC, :stable]
